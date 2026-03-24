@@ -41,3 +41,7 @@ Modern AI search tools often provide special debugging URLs that allow you to in
 - `manifest.json` - Extension configuration
 - `popup.html/js` - Settings UI
 - `background.js` - Context menu and link handling
+
+## License
+
+MIT License - See [LICENSE](LICENSE) file for details
