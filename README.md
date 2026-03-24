@@ -25,9 +25,9 @@ Modern AI search tools often provide special debugging URLs that allow you to in
 
 ## Example
 
-- Configured URL: `https://r.jina.ai/`
-- Clicked link: `https://x.com/LumaLabsAI`
-- Result: Opens `https://r.jina.ai/https://x.com/LumaLabsAI` in new tab
+- Configured URL: `https://example.com/api/`
+- Clicked link: `https://target.com/page`
+- Result: Opens `https://example.com/api/https://target.com/page` in new tab
 
 ## Installation
 

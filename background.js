@@ -14,24 +14,23 @@ function initializeContextMenus() {
     chrome.storage.sync.get('proxies', (result) => {
       const proxies = result.proxies || [];
       
-      // Create parent menu item if there are proxies
-      if (proxies.length > 0) {
+      // Always create parent menu item
+      chrome.contextMenus.create({
+        id: 'proxy-opener-parent',
+        title: 'Open Link Via',
+        contexts: ['link'],
+        enabled: proxies.length > 0
+      });
+
+      // Create child menu items for each proxy
+      proxies.forEach(proxy => {
         chrome.contextMenus.create({
-          id: 'proxy-opener-parent',
-          title: 'Open Link Via',
+          id: `proxy-${proxy.id}`,
+          parentId: 'proxy-opener-parent',
+          title: proxy.label,
           contexts: ['link']
         });
-
-        // Create child menu items for each proxy
-        proxies.forEach(proxy => {
-          chrome.contextMenus.create({
-            id: `proxy-${proxy.id}`,
-            parentId: 'proxy-opener-parent',
-            title: proxy.label,
-            contexts: ['link']
-          });
-        });
-      }
+      });
       
       isInitializing = false;
     });
