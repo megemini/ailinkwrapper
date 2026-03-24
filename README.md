@@ -1,4 +1,4 @@
-# AI Link Wrapper Chrome Extension
+# AI Link Wrapper
 
 A Chrome extension that allows you to open links through configured proxy/wrapper URLs via context menu.
 

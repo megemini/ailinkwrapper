@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Link Proxy Opener",
+  "name": "AI Link Wrapper",
   "version": "1.0.0",
   "description": "Open links through configured proxy/wrapper URLs",
   "permissions": [
