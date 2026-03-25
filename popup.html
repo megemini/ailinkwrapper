@@ -191,6 +191,83 @@
       border-radius: 6px;
       margin-top: 16px;
     }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 16px 16px;
+      border-bottom: 1px solid #e4e4e7;
+    }
+
+    .tab-btn {
+      padding: 8px 14px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: none;
+      color: #71717a;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: #09090b;
+    }
+
+    .tab-btn.active {
+      color: #09090b;
+      border-bottom-color: #09090b;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .domain-item {
+      border: 1px solid #e4e4e7;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: white;
+    }
+
+    .domain-item:hover {
+      border-color: #d4d4d8;
+      background: #fafafa;
+    }
+
+    .domain-label {
+      font-weight: 500;
+      color: #09090b;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .domain-rule {
+      font-size: 12px;
+      color: #71717a;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      line-height: 1.4;
+    }
+
+    .domain-item-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .domain-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
   </style>
 </head>
 <body>
@@ -200,17 +277,41 @@
   </div>
   
   <div class="container">
-    <div class="add-section">
-      <input type="text" id="labelInput" placeholder="Label (e.g., 'My Proxy')" />
-      <input type="text" id="urlInput" placeholder="Proxy URL (e.g., 'https://example.com/api/')" />
-      <div class="button-group">
-        <button id="addBtn" class="add-btn">Add Proxy</button>
-        <button id="cancelBtn" class="cancel-btn">Clear</button>
+    <!-- Tabs for switching modes -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="proxy-mode">Proxy URLs</button>
+      <button class="tab-btn" data-tab="domain-mode">Domain Replace</button>
+    </div>
+
+    <!-- Proxy Mode Tab -->
+    <div id="proxy-mode" class="tab-content active">
+      <div class="add-section">
+        <input type="text" id="labelInput" placeholder="Label (e.g., 'My Proxy')" />
+        <input type="text" id="urlInput" placeholder="Proxy URL (e.g., 'https://example.com/api/')" />
+        <div class="button-group">
+          <button id="addBtn" class="add-btn">Add Proxy</button>
+          <button id="cancelBtn" class="cancel-btn">Clear</button>
+        </div>
+      </div>
+      <div id="proxyList">
+        <div class="empty-state">No proxies configured yet</div>
       </div>
     </div>
 
-    <div id="proxyList">
-      <div class="empty-state">No proxies configured yet</div>
+    <!-- Domain Replace Mode Tab -->
+    <div id="domain-mode" class="tab-content">
+      <div class="add-section">
+        <input type="text" id="domainLabelInput" placeholder="Label (e.g., 'Dev Server')" />
+        <input type="text" id="domainSourceInput" placeholder="Original domain (e.g., 'foo.bar')" />
+        <input type="text" id="domainTargetInput" placeholder="Replacement domain (e.g., 'xyz.abc')" />
+        <div class="button-group">
+          <button id="addDomainBtn" class="add-btn">Add Replace Rule</button>
+          <button id="cancelDomainBtn" class="cancel-btn">Clear</button>
+        </div>
+      </div>
+      <div id="domainList">
+        <div class="empty-state">No domain replacements configured yet</div>
+      </div>
     </div>
   </div>
 
