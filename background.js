@@ -131,5 +131,97 @@ function replaceDomain(url, sourceDomain, targetDomain) {
   }
 }
 
+// Omnibox support
+chrome.omnibox.onInputStarted.addListener(() => {
+  chrome.omnibox.setDefaultSuggestion({
+    description: 'Type proxy/rule name and URL: <match>name url</match>'
+  });
+});
+
+chrome.omnibox.onInputChanged.addListener((text, suggest) => {
+  const input = text.trim();
+  
+  chrome.storage.sync.get(['proxies', 'domainRules'], (result) => {
+    const proxies = result.proxies || [];
+    const domainRules = result.domainRules || [];
+    const suggestions = [];
+    
+    // Parse input: first word is name filter, rest is URL
+    const spaceIndex = input.indexOf(' ');
+    const nameFilter = spaceIndex > -1 ? input.substring(0, spaceIndex).toLowerCase() : input.toLowerCase();
+    const urlPart = spaceIndex > -1 ? input.substring(spaceIndex + 1).trim() : '';
+
+    proxies.forEach(proxy => {
+      if (proxy.label.toLowerCase().includes(nameFilter)) {
+        const desc = urlPart
+          ? `via <match>${escapeXml(proxy.label)}</match>: ${escapeXml(proxy.url + urlPart)}`
+          : `via <match>${escapeXml(proxy.label)}</match> — type a URL after the name`;
+        suggestions.push({
+          content: `${proxy.label} ${urlPart}`,
+          description: desc
+        });
+      }
+    });
+
+    domainRules.forEach(rule => {
+      if (rule.label.toLowerCase().includes(nameFilter)) {
+        const desc = urlPart
+          ? `with <match>${escapeXml(rule.label)}</match>: ${escapeXml(rule.source)} → ${escapeXml(rule.target)}`
+          : `with <match>${escapeXml(rule.label)}</match> — type a URL after the name`;
+        suggestions.push({
+          content: `${rule.label} ${urlPart}`,
+          description: desc
+        });
+      }
+    });
+
+    suggest(suggestions);
+  });
+});
+
+function escapeXml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+chrome.omnibox.onInputEntered.addListener((text, disposition) => {
+  const input = text.trim();
+  const spaceIndex = input.indexOf(' ');
+  
+  if (spaceIndex === -1) return;
+  
+  const name = input.substring(0, spaceIndex).trim();
+  const url = input.substring(spaceIndex + 1).trim();
+  
+  if (!url) return;
+
+  chrome.storage.sync.get(['proxies', 'domainRules'], (result) => {
+    const proxies = result.proxies || [];
+    const domainRules = result.domainRules || [];
+    let finalUrl = null;
+
+    // Match proxy by label (case-insensitive)
+    const proxy = proxies.find(p => p.label.toLowerCase() === name.toLowerCase());
+    if (proxy) {
+      finalUrl = proxy.url + url;
+    }
+
+    // Match domain rule by label (case-insensitive)
+    if (!finalUrl) {
+      const rule = domainRules.find(r => r.label.toLowerCase() === name.toLowerCase());
+      if (rule) {
+        finalUrl = replaceDomain(url, rule.source, rule.target);
+      }
+    }
+
+    if (finalUrl) {
+      if (disposition === 'currentTab') {
+        chrome.tabs.update({ url: finalUrl });
+      } else {
+        chrome.tabs.create({ url: finalUrl });
+      }
+    }
+  });
+});
+
 // Initialize on first run
 initializeContextMenus();

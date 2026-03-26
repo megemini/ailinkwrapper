@@ -19,6 +19,9 @@
   "background": {
     "service_worker": "background.js"
   },
+  "omnibox": {
+    "keyword": "al"
+  },
   "host_permissions": [
     "<all_urls>"
   ]

@@ -15,6 +15,7 @@ Modern AI search tools often provide special debugging URLs that allow you to in
 - Right-click on any link to see "Open Link Via" menu options
 - Configure custom proxy URLs and labels
 - Automatically concatenate proxy URLs with the clicked link
+- Address bar (Omnibox) quick access: type `al` + Tab to open links via configured proxies
 - Persistent configuration stored in Chrome sync storage
 
 ## Usage
@@ -22,6 +23,13 @@ Modern AI search tools often provide special debugging URLs that allow you to in
 1. **Add Proxy URLs**: Click the extension icon, enter a label and proxy URL, then click "Add Proxy"
 2. **Open Links**: Right-click any link → "Open Link Via" → Select your configured proxy
 3. **Delete Proxies**: Click the "Delete" button next to a proxy configuration
+
+### Address Bar (Omnibox)
+
+1. Type `al` in the address bar, then press **Tab** to activate the extension
+2. Type `<proxy-name> <URL>`, e.g. `myproxy https://target.com/page`
+3. Suggestions will auto-complete matching proxy/domain rule names as you type
+4. Press **Enter** to open in the current tab, or **Alt+Enter** to open in a new tab
 
 ## Example
 
